@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name                Calcula Ponto Restante
-// @version             1.0.0
+// @version     	    1.0.0
 // @description         Calcula quanto tempo falta pra poder parar de trabalhar
 // @author              joaovperin
-// @match               https://ponto.cwi.com.br/Lite/Home.aspx
 // @icon                https://www.google.com/s2/favicons?sz=64&domain=cwi.com.br
+// @match               https://ponto.cwi.com.br/Lite/Home.aspx
 // @downloadURL         https://raw.githubusercontent.com/joaovperin/UserScripts/main/calculaPonto.js
 // @updateURL           https://raw.githubusercontent.com/joaovperin/UserScripts/main/calculaPonto.js
 // ==/UserScript==
