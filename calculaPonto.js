@@ -9,44 +9,37 @@
 // @updateURL           https://raw.githubusercontent.com/joaovperin/UserScripts/main/calculaPonto.js
 // ==/UserScript==
 
-(function () {
+(function (targetTime) {
     'use strict';
 
-    const targetTime = 8 * 60 + 30; // 8 hours and 30 minutes
-
-    const minutesArray = [];
-    let idx = 0;
-    while (true) {
+    const pointmentsList = [];
+    for (let idx = 0; ; idx++) {
         const block = document.querySelector(`#ctl00_cphPrincipal_lblDailyTimeclock${idx}`);
-        if (!block) {
-            break;
-        }
-        const blockText = block.innerText;
-        if (!blockText) {
+        if (!block?.innerText) {
             break;
         }
 
-        const [hour, minute] = blockText.split(':');
+        const [hour, minute] = block.innerText.trim().split(':');
         const hourNumber = Number(hour);
         const minuteNumber = Number(minute);
         const totalMinutes = hourNumber * 60 + minuteNumber;
-        minutesArray.push(totalMinutes);
-        idx++;
+        pointmentsList.push(totalMinutes);
     }
 
 
-    let message = '...';
-    if (minutesArray.length > 0 && minutesArray.length % 2 != 0) {
+    if (pointmentsList.length > 0 && pointmentsList.length % 2 != 0) {
         const now = new Date();
-        minutesArray.push(now.getHours() * 60 + now.getMinutes());
+        pointmentsList.push(now.getHours() * 60 + now.getMinutes());
     }
 
     let workedMinutes = 0;
-    for (let i = 0; i < minutesArray.length - 1; i += 2) {
-        workedMinutes += minutesArray[i + 1] - minutesArray[i];
+    for (let i = 0; i < pointmentsList.length - 1; i += 2) {
+        workedMinutes += pointmentsList[i + 1] - pointmentsList[i];
     }
 
     const remaminingTime = targetTime - workedMinutes;
+
+    let message = '...';
     if (remaminingTime < 0) {
         message = `Excedido em ${getTimeDescription(remaminingTime)} minutos`;
     }
@@ -54,16 +47,20 @@
         message = `Faltam ${getTimeDescription(remaminingTime)} minutos pra você poder parar de trabalhar`;
     }
 
-    let myDiv = document.querySelector('div#myDiv');
-    if (!myDiv) {
-        myDiv = document.createElement('div');
-        myDiv.id = 'myDiv';
-        document.body.appendChild(myDiv);
-    }
-    myDiv.innerText = `Status: ${message}`;
+    renderMessage(`Status: ${message}`);
 
-    const container = document.querySelector('div#main') || document.body;
-    container.appendChild(myDiv);
+    function renderMessage(message) {
+        let divElement = document.querySelector('div#p-status');
+        if (!divElement) {
+            divElement = document.createElement('div');
+            divElement.id = 'p-status';
+            document.body.appendChild(divElement);
+        }
+        divElement.innerText = message;
+
+        (document.querySelector('div#main') || document.body)
+            .appendChild(divElement);
+    }
 
     function getTimeDescription(timeInMinutes) {
         const hours = Math.floor(timeInMinutes / 60);
@@ -71,4 +68,6 @@
         return `${hours} horas e ${minutes} minutos`;
     }
 
-})();
+})(
+    8.5 * 60, /* 8 hours and 30 minutes */
+);
