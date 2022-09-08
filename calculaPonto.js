@@ -1,10 +1,12 @@
 // ==UserScript==
-// @name         Calcula Ponto Restante
-// @version      0.1
-// @description  Calcula quanto tempo falta pra poder parar de trabalhar
-// @author       joaovperin
-// @match        https://ponto.cwi.com.br/Lite/Home.aspx
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=cwi.com.br
+// @name                Calcula Ponto Restante
+// @version             1.0.0
+// @description         Calcula quanto tempo falta pra poder parar de trabalhar
+// @author              joaovperin
+// @match               https://ponto.cwi.com.br/Lite/Home.aspx
+// @icon                https://www.google.com/s2/favicons?sz=64&domain=cwi.com.br
+// @downloadURL         https://raw.githubusercontent.com/joaovperin/UserScripts/main/calculaPonto.js
+// @updateURL           https://raw.githubusercontent.com/joaovperin/UserScripts/main/calculaPonto.js
 // ==/UserScript==
 
 (function () {
@@ -34,6 +36,10 @@
 
 
     let message = '...';
+    if (minutesArray.length > 0 && minutesArray.length % 2 != 0) {
+        const now = new Date();
+        minutesArray.push(now.getHours() * 60 + now.getMinutes());
+    }
 
     let workedMinutes = 0;
     for (let i = 0; i < minutesArray.length - 1; i += 2) {
@@ -42,10 +48,10 @@
 
     const remaminingTime = targetTime - workedMinutes;
     if (remaminingTime < 0) {
-        message = `Excedido em ${Math.abs(remaminingTime)} minutos`;
+        message = `Excedido em ${getTimeDescription(remaminingTime)} minutos`;
     }
     if (remaminingTime > 0) {
-        message = `Faltam ${remaminingTime} minutos pra você poder parar de trabalhar`;
+        message = `Faltam ${getTimeDescription(remaminingTime)} minutos pra você poder parar de trabalhar`;
     }
 
     let myDiv = document.querySelector('div#myDiv');
@@ -58,5 +64,11 @@
 
     const container = document.querySelector('div#main') || document.body;
     container.appendChild(myDiv);
+
+    function getTimeDescription(timeInMinutes) {
+        const hours = Math.floor(timeInMinutes / 60);
+        const minutes = timeInMinutes % 60;
+        return `${hours} horas e ${minutes} minutos`;
+    }
 
 })();
