@@ -4,12 +4,12 @@
 // @description         Calcula quanto tempo falta pra poder parar de trabalhar
 // @author              joaovperin
 // @icon                https://www.google.com/s2/favicons?sz=64&domain=cwi.com.br
-// @match               https://ponto.cwi.com.br/Lite/Home.aspx
+// @include             https://ponto.cwi.com.br/Lite/Home.aspx
 // @downloadURL         https://raw.githubusercontent.com/joaovperin/UserScripts/main/calculaPonto.js
 // @updateURL           https://raw.githubusercontent.com/joaovperin/UserScripts/main/calculaPonto.js
 // ==/UserScript==
 
-(function (targetTime, updateIntervalInSeconds) {
+((targetTime, updateIntervalInSeconds) => {
     'use strict';
 
     let lastMessage = '';
@@ -97,7 +97,6 @@
         const minutes = absTimeInMinutes % 60;
         return `${hours} horas e ${minutes} minutos`;
     }
-
 })(
     8.5 * 60, /* targetTime = 8 hours and 30 minutes */
     1 * 60, /* updateInterval = 1 minute */
